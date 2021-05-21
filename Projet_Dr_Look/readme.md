@@ -13,7 +13,7 @@ and research groups. It consists of 33.31 GB of information that includes target
 tablets, ready-to-use embeddings, and json articles.
 we used a subset of this dataset that you can download from this link : https://drive.google.com/drive/folders/1zTtY_AQk5Me16OORSnta9IZ7kSuu6uFh
 
-## How to run the search engine (![equation](https://latex.codecogs.com/svg.latex?Dr.LOOK^{©}))
+## How to run the search engine :
 
 #### Cleaning docs and getting them ready to index
 
