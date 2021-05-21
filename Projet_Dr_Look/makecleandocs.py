@@ -15,6 +15,10 @@ from extract_data import ExtractData
 from preprocess_data import PreprocessData
 from utils import read_json  
 from utils import write_file
+
+language = 'en'
+
+
 if __name__ == '__main__':
     path_documents = sys.argv[1]
     list_documents = glob.glob(path_documents + '*.json')
@@ -29,7 +33,7 @@ if __name__ == '__main__':
         text = obj_data.get_text()
 
         # make sure the article is in english
-        if detect(text)=='en':
+        if detect(text)==language:
           
           
           # call get_paper_id method

@@ -84,7 +84,6 @@ def main():
     
     searcher = ix.searcher()
     parser_query = QueryParser("content", schema=Schemah)
-    user_query = "cancer"
     q = parser_query.parse(sys.argv[3])
     
     
