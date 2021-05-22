@@ -5,8 +5,7 @@ from whoosh.analysis import *
 from whoosh import qparser
 from whoosh.qparser import QueryParser
 import time
-from multiprocessing import Pool
-from multiprocessing.pool import ThreadPool
+from nltk import word_tokenize
 import argparse
 import glob
 import time
@@ -30,7 +29,7 @@ class RedefineIndex:
     
 
 
-def create_index(save_index_folder, index_name, num_docs_index, lst_articlesIndex, schema, pool):
+def create_index(save_index_folder, index_name, num_docs_index, lst_articlesIndex, schema):
     """
         It create an index for the documents in the list, in the save folder,
         if the index doesn't exist already
@@ -57,7 +56,6 @@ def create_index(save_index_folder, index_name, num_docs_index, lst_articlesInde
             article_content = redefine_index.get_content(path_name_file_index)
 
             writer.add_document(path=path_name_file_index, content=article_content)  # , time=modtime
-        # writer.remove_field("path")
         writer.commit(merge=False)
         t1 = time.time()
         print('*' * 10 + ' Index built in {}s '.format(round(t1 - t0, 3)) + '*' * 10)  # It's CPU seconds elapsed (floating point)
@@ -76,10 +74,11 @@ def main():
 
     lst_index_docs = glob.glob(path_read_docs_index + '*.txt')
     
-    pool = Pool(8)
-    Schemah = Schema(path=TEXT(stored=True), content=TEXT(analyzer=StemmingAnalyzer()))
+  
+    Schemah = Schema(path=TEXT(stored=True), content=TEXT(analyzer=StemmingAnalyzer(), spelling=True))
     
-    ix = create_index(path_save_index_folder, index_name, num_docs_index, lst_index_docs, Schemah, pool)
+
+    ix = create_index(path_save_index_folder, index_name, num_docs_index, lst_index_docs, Schemah)
     
     
     searcher = ix.searcher()
@@ -87,7 +86,7 @@ def main():
     q = parser_query.parse(sys.argv[3])
     
     
-    
+
     results = searcher.search(q, limit=number_docs_result_search)
     
   
@@ -102,6 +101,12 @@ def main():
     for doc in docs:
        print(doc)
 
-
+    corrector = searcher.corrector("content")
+    corrected = searcher.correct_query(q, sys.argv[3])
+    if corrected.query != q:
+        mistyped_words = word_tokenize(sys.argv[3])
+        for mistyped_word in mistyped_words:
+            Listecorr = corrector.suggest(mistyped_word, limit=3)
+            print("Did you mean",", ".join(Listecorr),"instead of",mistyped_word,"?")
 if __name__ == "__main__":
     main()
