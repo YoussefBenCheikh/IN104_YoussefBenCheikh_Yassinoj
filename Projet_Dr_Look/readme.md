@@ -57,3 +57,4 @@ Code files :
 The search engine browses only the articles in english.
 The search engine shows the best ten results, to modify the number access to the variable number_docs_result_search in indexandsearch.py.
 The search engine indexs 5000 document, to modify the number access to the variable num_docs_index in indexandsearch.py.
+If you misspelled a word, Dr.LOOK will suggest three corrections based on the words in the articles.
