@@ -1,3 +1,6 @@
+""""
+@author: yassineoj
+"""
 import os.path
 
 from whoosh.fields import Schema, TEXT
@@ -23,10 +26,10 @@ class RedefineIndex:
         :return: file content
         :rtype: str
         """
-        f= open(path_name_file_index,'r') 
+        f= open(path_name_file_index,'r')
         content = f.read()
         return content
-    
+
 
 
 def create_index(save_index_folder, index_name, num_docs_index, lst_articlesIndex, schema):
@@ -37,29 +40,29 @@ def create_index(save_index_folder, index_name, num_docs_index, lst_articlesInde
         :rtype: index
         """
     t0 = time.time()
-    
+
     if not exists_in(save_index_folder, index_name):
-        
+
         print('*' * 10 + ' Building the index for {} documents '.format(num_docs_index) + '*' * 10)
         ix = create_in(save_index_folder, schema, index_name)  # it returns an index.
         writer = ix.writer(procs=6, multisegment=True, limitmb=4096)  # procs=6, limitmb=4GB## OR 8192
 
         for idx, path_name_file_index in enumerate(lst_articlesIndex):
-            
+
             if idx % 10000 == 0:
                 t1 = time.time()
                 print("  {}/{}. elapsed time : {}s".format(idx, num_docs_index, round(t1 - t0, 3)));
                 sys.stdout.flush()
             # Object
             redefine_index = RedefineIndex()
-            
+
             article_content = redefine_index.get_content(path_name_file_index)
 
             writer.add_document(path=path_name_file_index, content=article_content)  # , time=modtime
         writer.commit(merge=False)
         t1 = time.time()
         print('*' * 10 + ' Index built in {}s '.format(round(t1 - t0, 3)) + '*' * 10)  # It's CPU seconds elapsed (floating point)
-    
+
     ix = open_dir(save_index_folder, index_name)
 
     return ix
@@ -73,30 +76,30 @@ def main():
     number_docs_result_search = 10
 
     lst_index_docs = glob.glob(path_read_docs_index + '*.txt')
-    
-  
+
+
     Schemah = Schema(path=TEXT(stored=True), content=TEXT(analyzer=StemmingAnalyzer(), spelling=True))
-    
+
 
     ix = create_index(path_save_index_folder, index_name, num_docs_index, lst_index_docs, Schemah)
-    
-    
+
+
     searcher = ix.searcher()
     parser_query = QueryParser("content", schema=Schemah)
     q = parser_query.parse(sys.argv[3])
-    
-    
+
+
 
     results = searcher.search(q, limit=number_docs_result_search)
-    
-  
-    
+
+
+
     docs = []
     for x in list(results):
-            
+
             doc_name = x['path']
             docs.append(doc_name)
-    
+
     print("Best",len(docs),"results for you research are :")
     for doc in docs:
        print(doc)

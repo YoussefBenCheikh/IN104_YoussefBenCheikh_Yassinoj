@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Apr 27 16:59:23 2021
-
-@author: youssefbencheikh
+@author: yassineoj
 """
 
 from nltk.corpus import stopwords
@@ -54,8 +53,8 @@ class PreprocessData:
         if isinstance(text, str):
             lst_words = [word for word in word_tokenize(text) if word not in string.punctuation]
         return ' '.join(lst_words)
-    
-    
+
+
     def remove_number(self, text):
         """
         It removes the numbers (int or float)
@@ -80,12 +79,12 @@ class PreprocessData:
         if isinstance(text, str):
             lst_characters = [character for character in text if character.isalnum() or character==" "]
         return ''.join(lst_characters)
-        
+
     def lemmatization_text(self, text):
         """
         :param text: it is the text of the article
         :type: str
-        :return text: inflected forms of a word back to 
+        :return text: inflected forms of a word back to
         original so they can be analysed as a single item
         :rtype: str
         """
