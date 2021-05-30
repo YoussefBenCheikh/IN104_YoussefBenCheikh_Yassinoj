@@ -1,0 +1,31 @@
+{
+    "paper_id": "ABC00001",
+    "metadata": {
+        "title": "Covid",
+        "authors": []
+    },
+    "body_text": [
+        {
+            "text": "Covid is coron virus",
+            "cite_spans": [],
+            "section": "",
+            "ref_spans": []
+        }
+    ],
+    "ref_entries": {},
+    "back_matter": [],
+    "bib_entries": {
+        "BIBREF0": {
+            "title": "The possible macroeconomic effect on the UK of an influenza pandemic",
+            "authors": [],
+            "year": 2009,
+            "venue": "",
+            "volume": "",
+            "issn": "",
+            "pages": null,
+            "other_ids": {
+                "DOI": []
+            }
+        }
+    }
+}
